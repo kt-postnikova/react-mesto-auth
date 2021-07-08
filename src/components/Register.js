@@ -2,7 +2,9 @@ import React from 'react';
 
 function Register() {
     return (
-        <div></div>
+        <div className="register">
+            <h2 className="register__title">Регистрация</h2>
+        </div>
     );
 }
 

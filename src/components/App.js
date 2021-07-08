@@ -143,7 +143,7 @@ function App() {
     <CurrentUserContext.Provider value={currentUser}>
       <Header />
       <Switch>
-        <ProtectedRoute
+        {/* <ProtectedRoute
           path="/"
           loggedIn={loggedIn}
           component={Main}
@@ -154,7 +154,7 @@ function App() {
           cards={cards}
           onCardLike={handleCardLike}
           onCardDelete={handleCardDelete}
-          setCards={setCards} />
+          setCards={setCards} /> */}
         <Route path="/sign-in">
           <Register />
         </Route>
