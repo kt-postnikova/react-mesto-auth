@@ -11,6 +11,8 @@ import AddPlacePopup from './AddPlacePopup';
 import ImagePopup from './ImagePopup';
 import api from '../utils/api';
 import ProtectedRoute from './ProtectedRoute';
+import Register from './Register';
+import Login from './Login';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 
 
