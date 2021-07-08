@@ -10,6 +10,8 @@ import EditAvatarPopup from './EditAvatarPopup';
 import AddPlacePopup from './AddPlacePopup';
 import ImagePopup from './ImagePopup';
 import api from '../utils/api';
+import * as apiAuth from '../utils/apiAuth';
+//import apiAuth from '../utils/apiAuth';
 import ProtectedRoute from './ProtectedRoute';
 import Register from './Register';
 import Login from './Login';
@@ -139,12 +141,32 @@ function App() {
 
   }
 
+  function handleRegisterSubmit(password, email) {
+    apiAuth.register(password, email)
+      .then(res => {
+        console.log(res);
+      })
+
+
+    // api.createCard(card)
+    // .then(newCard => {
+    //   setCards([newCard, ...cards]);
+
+    //   setAddPlacePopupOpen(false);
+    // })
+    // .catch(err => {
+    //   console.log(err);
+    // })
+
+  }
+
+
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <Header loggedIn={loggedIn} />
       <Switch>
-        {/* <ProtectedRoute
-          path="/"
+        <ProtectedRoute
+          exact path="/"
           loggedIn={loggedIn}
           component={Main}
           onEditAvatar={handleEditAvatarClick}
@@ -154,9 +176,9 @@ function App() {
           cards={cards}
           onCardLike={handleCardLike}
           onCardDelete={handleCardDelete}
-          setCards={setCards} /> */}
+          setCards={setCards} />
         <Route path="/sign-up">
-          <Register />
+          <Register onRegister={handleRegisterSubmit} />
         </Route>
         <Route path="/sign-in">
           <Login />
