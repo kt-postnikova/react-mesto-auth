@@ -9,6 +9,7 @@ import EditProfilePopup from './EditProfilePopup';
 import EditAvatarPopup from './EditAvatarPopup';
 import AddPlacePopup from './AddPlacePopup';
 import ImagePopup from './ImagePopup';
+import InfoTooltip from './InfoTooltip';
 import api from '../utils/api';
 import * as apiAuth from '../utils/apiAuth';
 //import apiAuth from '../utils/apiAuth';
@@ -22,6 +23,9 @@ function App() {
   const [isEditProfilePopupOpen, setEditProfilePopupOpen] = React.useState(false);
   const [isAddPlacePopupOpen, setAddPlacePopupOpen] = React.useState(false);
   const [isEditAvatarPopupOpen, setEditAvatarPopupOpen] = React.useState(false);
+
+
+  const [isInfoTooltipOpen, setInfoTooltipOpen] = React.useState(false);
 
   const [selectedCard, setSelectedCard] = React.useState(null);
   const [cards, setCards] = React.useState([]);
@@ -68,6 +72,8 @@ function App() {
     setEditProfilePopupOpen(false);
     setAddPlacePopupOpen(false);
     setEditAvatarPopupOpen(false);
+
+    setInfoTooltipOpen(false);
 
     setSelectedCard(null)
   }
@@ -146,18 +152,9 @@ function App() {
       .then(res => {
         console.log(res);
       })
-
-
-    // api.createCard(card)
-    // .then(newCard => {
-    //   setCards([newCard, ...cards]);
-
-    //   setAddPlacePopupOpen(false);
-    // })
-    // .catch(err => {
-    //   console.log(err);
-    // })
-
+      .finally(res => {
+        setInfoTooltipOpen(true)
+      })
   }
 
 
@@ -185,6 +182,9 @@ function App() {
         </Route>
       </Switch>
       <Footer />
+      <InfoTooltip
+        isOpen={isInfoTooltipOpen}
+        onClose={closeAllPopups} />
       <EditProfilePopup
         isOpen={isEditProfilePopupOpen}
         onClose={closeAllPopups}
