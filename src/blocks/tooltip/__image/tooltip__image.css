@@ -1,8 +1,5 @@
 .tooltip__image {
-    background-image: url('../../../images/ok.svg');
-    width: 120px;
-    height: 120px;
-    margin: auto;
     margin-top: 60px;
     margin-bottom: 32px;
+    margin-left: 155px;
 }
