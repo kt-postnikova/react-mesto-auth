@@ -5,7 +5,7 @@ function NavBar(props) {
     return (
         <div className="navbar">
             <p className="navbar__email">{props.email}</p>
-            <button onClick={props.signOut} className="navbar__button">Выйти</button>
+            <button onClick={props.onSignOut} className="navbar__button">Выйти</button>
         </div>
     );
 }
