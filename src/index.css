@@ -77,3 +77,7 @@
 @import url('blocks/tooltip/tooltip.css');
 @import url('blocks/tooltip/__image/tooltip__image.css');
 @import url('blocks/tooltip/__info/tooltip__info.css');
+
+@import url('blocks/navbar/navbar.css');
+@import url('blocks/navbar/__email/navbar__email.css');
+@import url('blocks/navbar/__button/navbar__button.css');
