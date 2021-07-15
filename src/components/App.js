@@ -17,8 +17,8 @@ import ProtectedRoute from './ProtectedRoute';
 import Register from './Register';
 import Login from './Login';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
-import ok from '../images/ok.svg';
-import error from '../images/error.svg';
+import okImage from '../images/ok.svg';
+import errorImage from '../images/error.svg';
 
 function App() {
   const [isEditProfilePopupOpen, setEditProfilePopupOpen] = React.useState(false);
@@ -150,12 +150,12 @@ function App() {
     apiAuth.register(password, email)
       .then(() => {
         setMessage({ image: '', info: '' });
-        setMessage({ image: ok, info: 'Вы успешно зарегистрировались!' });
+        setMessage({ image: okImage, info: 'Вы успешно зарегистрировались!' });
         history.push('/signin')
       })
       .catch(() => {
         setMessage({ image: '', info: '' });
-        setTooltip({ image: error, info: 'Что-то пошло не так! Попробуйте ещё раз.' })
+        setMessage({ image: errorImage, info: 'Что-то пошло не так! Попробуйте ещё раз.' })
       })
       .finally(() => {
         setInfoTooltipOpen(true)
@@ -173,7 +173,7 @@ function App() {
           })
       })
       .catch(() => {
-        setTooltipOpen(true);
+        setInfoTooltipOpen(true);
         setMessage({ image: errorImage, info: 'Что-то пошло не так! Попробуйте ещё раз.' })
       })
   }
@@ -204,7 +204,7 @@ function App() {
 
   function signOut() {
     localStorage.removeItem('token');
-    setLoggedIn(false)
+    setLoggedIn(false);
     history.push('/signin');
   }
 
@@ -230,13 +230,16 @@ function App() {
         <Route path="/signin">
           <Login onAuth={handleAuthSubmit} />
         </Route>
+        <Route exact path="/">
+          {loggedIn ? (<Redirect to="/" />) : (<Redirect to="/signin" />)}
+        </Route>
       </Switch>
       <Footer />
       <InfoTooltip
         isOpen={isInfoTooltipOpen}
         onClose={closeAllPopups}
-        image={tooltip.image}
-        info={tooltip.info} />
+        image={message.image}
+        info={message.info} />
       <EditProfilePopup
         isOpen={isEditProfilePopupOpen}
         onClose={closeAllPopups}
