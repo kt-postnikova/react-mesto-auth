@@ -37,7 +37,7 @@ function Register(props) {
                     placeholder="Пароль"
                     type="password" />
                 <button className="register__button">Зарегистрироваться</button>
-                <p className="register__link">Уже зарегистрированы? <Link to="/sign-in" className="register__link">Войти</Link></p>
+                <p className="register__link">Уже зарегистрированы? <Link to="/signin" className="register__link">Войти</Link></p>
             </form>
         </div>
     );
