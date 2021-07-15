@@ -1,5 +1,5 @@
-import React from 'react';
-import { Route, Switch, Redirect } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Route, Switch, Redirect, useHistory } from 'react-router-dom';
 import '../index.css';
 import Header from './Header';
 import Main from './Main';
@@ -17,23 +17,24 @@ import ProtectedRoute from './ProtectedRoute';
 import Register from './Register';
 import Login from './Login';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
-
+import ok from '../images/ok.svg';
+import error from '../images/error.svg';
 
 function App() {
   const [isEditProfilePopupOpen, setEditProfilePopupOpen] = React.useState(false);
   const [isAddPlacePopupOpen, setAddPlacePopupOpen] = React.useState(false);
   const [isEditAvatarPopupOpen, setEditAvatarPopupOpen] = React.useState(false);
-
-
   const [isInfoTooltipOpen, setInfoTooltipOpen] = React.useState(false);
 
   const [selectedCard, setSelectedCard] = React.useState(null);
   const [cards, setCards] = React.useState([]);
-
   const [currentUser, setCurrentUser] = React.useState({});
 
   const [loggedIn, setLoggedIn] = React.useState(false);
+  const [email, setEmail] = React.useState('');
+  const [message, setMessage] = React.useState({ image: '', info: '' });
 
+  const history = useHistory();
 
   React.useEffect(() => {
     api.getUserInfo()
@@ -72,9 +73,7 @@ function App() {
     setEditProfilePopupOpen(false);
     setAddPlacePopupOpen(false);
     setEditAvatarPopupOpen(false);
-
     setInfoTooltipOpen(false);
-
     setSelectedCard(null)
   }
 
@@ -149,21 +148,72 @@ function App() {
 
   function handleRegisterSubmit(password, email) {
     apiAuth.register(password, email)
-      .then(res => {
-        console.log(res);
+      .then(() => {
+        setMessage({ image: '', info: '' });
+        setMessage({ image: ok, info: 'Вы успешно зарегистрировались!' });
+        history.push('/signin')
       })
-      .finally(res => {
+      .catch(() => {
+        setMessage({ image: '', info: '' });
+        setTooltip({ image: error, info: 'Что-то пошло не так! Попробуйте ещё раз.' })
+      })
+      .finally(() => {
         setInfoTooltipOpen(true)
       })
   }
 
+  function handleAuthSubmit(password, email) {
+    apiAuth.authorize(password, email)
+      .then(data => {
+        apiAuth.getContent(data)
+          .then(res => {
+            setEmail(res.data.email);
+            setLoggedIn(true)
+            history.push('./main-page')
+          })
+      })
+      .catch(() => {
+        setTooltipOpen(true);
+        setMessage({ image: errorImage, info: 'Что-то пошло не так! Попробуйте ещё раз.' })
+      })
+  }
+
+
+  function tokenCheck() {
+    if (localStorage.getItem('token')) {
+      const token = localStorage.getItem('token');
+      if (token) {
+        apiAuth.getContent(token)
+          .then(res => {
+            if (res) {
+              setLoggedIn(true);
+              setEmail(res.data.email);
+              history.push('./main-page')
+            }
+          })
+          .catch(err => {
+            console.log(err);
+          })
+      }
+    }
+  }
+
+  useEffect(() => {
+    tokenCheck()
+  }, [])
+
+  function signOut() {
+    localStorage.removeItem('token');
+    setLoggedIn(false)
+    history.push('/signin');
+  }
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
-      <Header loggedIn={loggedIn} />
+      <Header loggedIn={loggedIn} email={email} onSignOut={signOut} />
       <Switch>
         <ProtectedRoute
-          exact path="/"
+          exact path="/main-page"
           loggedIn={loggedIn}
           component={Main}
           onEditAvatar={handleEditAvatarClick}
@@ -174,17 +224,19 @@ function App() {
           onCardLike={handleCardLike}
           onCardDelete={handleCardDelete}
           setCards={setCards} />
-        <Route path="/sign-up">
+        <Route path="/signup">
           <Register onRegister={handleRegisterSubmit} />
         </Route>
-        <Route path="/sign-in">
-          <Login />
+        <Route path="/signin">
+          <Login onAuth={handleAuthSubmit} />
         </Route>
       </Switch>
       <Footer />
       <InfoTooltip
         isOpen={isInfoTooltipOpen}
-        onClose={closeAllPopups} />
+        onClose={closeAllPopups}
+        image={tooltip.image}
+        info={tooltip.info} />
       <EditProfilePopup
         isOpen={isEditProfilePopupOpen}
         onClose={closeAllPopups}
