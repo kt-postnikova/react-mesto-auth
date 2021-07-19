@@ -193,7 +193,7 @@ function App() {
     }
   }
 
-  useEffect(() => {
+  React.useEffect(() => {
     tokenCheck()
   }, [])
 
