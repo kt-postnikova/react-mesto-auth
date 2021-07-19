@@ -36,25 +36,24 @@ function App() {
 
   const history = useHistory();
 
+
   React.useEffect(() => {
-    api.getUserInfo()
-      .then(userInfo => {
-        setCurrentUser(userInfo);
+    Promise.all([
+      api.getCards(),
+      api.getUserInfo()
+    ])
+      .then(res => {
+        const cardsArray = res[0];
+        const userInfo = res[1];
+
+        setCards(cardsArray);
+        setCurrentUser(userInfo)
       })
       .catch(err => {
         console.log(err);
       })
   }, [])
 
-  React.useEffect(() => {
-    api.getCards()
-      .then(res => {
-        setCards(res);
-      })
-      .catch(err => {
-        console.log(err);
-      })
-  }, [])
 
 
   function handleEditAvatarClick() {
