@@ -36,25 +36,24 @@ function App() {
 
   const history = useHistory();
 
+
   React.useEffect(() => {
-    api.getUserInfo()
-      .then(userInfo => {
-        setCurrentUser(userInfo);
+    Promise.all([
+      api.getCards(),
+      api.getUserInfo()
+    ])
+      .then(res => {
+        const cardsArray = res[0];
+        const userInfo = res[1];
+
+        setCards(cardsArray);
+        setCurrentUser(userInfo)
       })
       .catch(err => {
         console.log(err);
       })
   }, [])
 
-  React.useEffect(() => {
-    api.getCards()
-      .then(res => {
-        setCards(res);
-      })
-      .catch(err => {
-        console.log(err);
-      })
-  }, [])
 
 
   function handleEditAvatarClick() {
@@ -149,12 +148,10 @@ function App() {
   function handleRegisterSubmit(password, email) {
     apiAuth.register(password, email)
       .then(() => {
-        setMessage({ image: '', info: '' });
         setMessage({ image: okImage, info: 'Вы успешно зарегистрировались!' });
         history.push('/signin')
       })
       .catch(() => {
-        setMessage({ image: '', info: '' });
         setMessage({ image: errorImage, info: 'Что-то пошло не так! Попробуйте ещё раз.' })
       })
       .finally(() => {
@@ -165,12 +162,12 @@ function App() {
   function handleAuthSubmit(password, email) {
     apiAuth.authorize(password, email)
       .then(data => {
-        apiAuth.getContent(data)
-          .then(res => {
-            setEmail(res.data.email);
-            setLoggedIn(true)
-            history.push('./main-page')
-          })
+        if (data.token) {
+          localStorage.setItem('token', data.token)
+        }
+        setLoggedIn(true);
+        setEmail(email);
+        history.push('./main-page')
       })
       .catch(() => {
         setInfoTooltipOpen(true);
@@ -180,25 +177,23 @@ function App() {
 
 
   function tokenCheck() {
-    if (localStorage.getItem('token')) {
-      const token = localStorage.getItem('token');
-      if (token) {
-        apiAuth.getContent(token)
-          .then(res => {
-            if (res) {
-              setLoggedIn(true);
-              setEmail(res.data.email);
-              history.push('./main-page')
-            }
-          })
-          .catch(err => {
-            console.log(err);
-          })
-      }
+    const token = localStorage.getItem('token');
+    if (token) {
+      apiAuth.getContent(token)
+        .then(res => {
+          if (res) {
+            setLoggedIn(true);
+            setEmail(res.data.email);
+            history.push('./main-page')
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        })
     }
   }
 
-  useEffect(() => {
+  React.useEffect(() => {
     tokenCheck()
   }, [])
 
@@ -230,8 +225,8 @@ function App() {
         <Route path="/signin">
           <Login onAuth={handleAuthSubmit} />
         </Route>
-        <Route exact path="/">
-          {loggedIn ? (<Redirect to="/" />) : (<Redirect to="/signin" />)}
+        <Route path="/">
+          {loggedIn ? (<Redirect to="/main-page" />) : (<Redirect to="/signin" />)}
         </Route>
       </Switch>
       <Footer />

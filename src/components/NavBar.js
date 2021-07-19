@@ -1,11 +1,11 @@
 import React from 'react';
 
-function NavBar(props) {
+function NavBar({ email, onSignOut }) {
 
     return (
         <div className="navbar">
-            <p className="navbar__email">{props.email}</p>
-            <button onClick={props.onSignOut} className="navbar__button">Выйти</button>
+            <p className="navbar__email">{email}</p>
+            <button onClick={onSignOut} className="navbar__button">Выйти</button>
         </div>
     );
 }
