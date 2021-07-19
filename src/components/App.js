@@ -173,21 +173,19 @@ function App() {
 
 
   function tokenCheck() {
-    if (localStorage.getItem('token')) {
-      const token = localStorage.getItem('token');
-      if (token) {
-        apiAuth.getContent(token)
-          .then(res => {
-            if (res) {
-              setLoggedIn(true);
-              setEmail(res.data.email);
-              history.push('./main-page')
-            }
-          })
-          .catch(err => {
-            console.log(err);
-          })
-      }
+    const token = localStorage.getItem('token');
+    if (token) {
+      apiAuth.getContent(token)
+        .then(res => {
+          if (res) {
+            setLoggedIn(true);
+            setEmail(res.data.email);
+            history.push('./main-page')
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        })
     }
   }
 
