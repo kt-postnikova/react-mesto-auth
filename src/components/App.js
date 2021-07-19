@@ -161,8 +161,12 @@ function App() {
 
   function handleAuthSubmit(password, email) {
     apiAuth.authorize(password, email)
-      .then(() => {
-        setLoggedIn(true)
+      .then(data => {
+        if (data.token) {
+          localStorage.setItem('token', data.token)
+        }
+        setLoggedIn(true);
+        setEmail(email);
         history.push('./main-page')
       })
       .catch(() => {
