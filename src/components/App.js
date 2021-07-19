@@ -148,12 +148,10 @@ function App() {
   function handleRegisterSubmit(password, email) {
     apiAuth.register(password, email)
       .then(() => {
-        setMessage({ image: '', info: '' });
         setMessage({ image: okImage, info: 'Вы успешно зарегистрировались!' });
         history.push('/signin')
       })
       .catch(() => {
-        setMessage({ image: '', info: '' });
         setMessage({ image: errorImage, info: 'Что-то пошло не так! Попробуйте ещё раз.' })
       })
       .finally(() => {
