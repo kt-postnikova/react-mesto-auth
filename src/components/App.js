@@ -221,7 +221,7 @@ function App() {
         <Route path="/signin">
           <Login onAuth={handleAuthSubmit} />
         </Route>
-        <Route exact path="/">
+        <Route path="/">
           {loggedIn ? (<Redirect to="/main-page" />) : (<Redirect to="/signin" />)}
         </Route>
       </Switch>
