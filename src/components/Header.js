@@ -9,8 +9,8 @@ function Header({ loggedIn, email, onSignOut }) {
 
     return (
         <header className="header page__header">
-            <a href="#" target="_self"><img className="header__logo" src={headerLogo}
-                alt="Логотип Место" /></a>
+            <Link to="/main-page"><img className="header__logo" src={headerLogo}
+                alt="Логотип Место" /></Link>
             {
                 loggedIn ?
                     <NavBar email={email} onSignOut={onSignOut} /> :
