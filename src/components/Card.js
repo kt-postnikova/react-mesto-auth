@@ -30,19 +30,17 @@ function Card({ card, onCardClick, onCardLike, onCardDelete }) {
     }
 
     return (
-        <>
-            <article className="element">
-                <img className="element__image" onClick={handleCardClick} alt={card.name} src={card.link} />
-                <button className={cardDeleteButtonClassName} onClick={handleDeleteClick} type="button" aria-label="Удалить"></button>
-                <div className="element__block">
-                    <h2 className="element__title">{card.name}</h2>
-                    <div className="like">
-                        <button className={cardLikeButtonClassName} onClick={handleLikeClick} type="button" aria-label="Нравится"></button>
-                        <span className="like__counter">{card.likes.length}</span>
-                    </div>
+        <article className="element">
+            <img className="element__image" onClick={handleCardClick} alt={card.name} src={card.link} />
+            <button className={cardDeleteButtonClassName} onClick={handleDeleteClick} type="button" aria-label="Удалить"></button>
+            <div className="element__block">
+                <h2 className="element__title">{card.name}</h2>
+                <div className="like">
+                    <button className={cardLikeButtonClassName} onClick={handleLikeClick} type="button" aria-label="Нравится"></button>
+                    <span className="like__counter">{card.likes.length}</span>
                 </div>
-            </article>
-        </>
+            </div>
+        </article>
     )
 }
 
