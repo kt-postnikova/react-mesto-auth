@@ -161,13 +161,9 @@ function App() {
 
   function handleAuthSubmit(password, email) {
     apiAuth.authorize(password, email)
-      .then(data => {
-        apiAuth.getContent(data)
-          .then(res => {
-            setEmail(res.data.email);
-            setLoggedIn(true)
-            history.push('./main-page')
-          })
+      .then(() => {
+        setLoggedIn(true)
+        history.push('./main-page')
       })
       .catch(() => {
         setInfoTooltipOpen(true);
